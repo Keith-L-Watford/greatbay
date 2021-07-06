@@ -4,8 +4,9 @@ require('dotenv').config()
 
 // mysql
 const mysql = require('mysql');
-const { resourceLimits } = require('worker_threads');
 // THIS IS HOW IT CONNECTS
+
+
 const connection = mysql.createConnection({
     host: 'localhost',
     port: 3306,
@@ -25,7 +26,7 @@ const letsGo = () => {
         .then((data) => {
             if (data.buyOrSell === 'Buy') {
                 weBuying();
-            } else if (ata.buyOrSell === 'Sell'){
+            } else if (ata.buyOrSell === 'Sell') {
                 weSelling();
             } else {
                 connection.end();
@@ -35,26 +36,33 @@ const letsGo = () => {
 
 
 const weBuying = () => {
-    connection.query('SELECT * FROM items', (err, res) => {
+    connection.query('SELECT item_name FROM items', (err, res) => {
         if (err) throw err;
 
-        inquirer.prompt([
-            {
-            name: "availableItems",
-            type: 'rawlist',
-            choices() {
-                const anArrayForItems = [];
-                res.forEach(({ item_name }) => {
-                    anArrayForItems.push(item_name);
-                });
-                return anArrayForItems;
+        inquirer.prompt([{
+                name: "availableItems",
+                type: 'rawlist',
+                choices() {
+                    const anArrayForItems = [];
+                    res.forEach(({ item_name }) => {
+                        anArrayForItems.push(item_name);
+                    });
+                    return anArrayForItems;
+                },
+                message: 'Which item would you like to bid on?',
             },
-            message: 'Which item would you like to bid on?',
-            }
-        ])
-    })
+            {
+                name: 'bid',
+                type: 'input',
+                message: 'How much would you like to bid?',
+            },
+        ]).then((data) => {
 
-        // connection.end()
+        });
+
+
+    })
+    // connection.end()
 };
 
 

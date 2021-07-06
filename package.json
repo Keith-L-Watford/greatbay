@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Keith-L-Watford/greatbay#readme",
   "dependencies": {
+    "dotenv": "^10.0.0",
     "inquirer": "^8.1.1",
     "mysql": "^2.18.1"
   }

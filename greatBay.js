@@ -11,13 +11,11 @@ const connection = mysql.createConnection({
   password : process.env.DB_PASS,
   database : process.env.DB_NAME,
 });
- 
-
 
 const letsGo = () => {
-    // inquirer.prompt({
+    inquirer.prompt({
 
-    // })
+    })
 connection.end()
 }
 

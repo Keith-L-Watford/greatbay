@@ -4,6 +4,8 @@ require('dotenv').config()
 
 // mysql
 const mysql = require('mysql');
+const { resourceLimits } = require('worker_threads');
+// THIS IS HOW IT CONNECTS
 const connection = mysql.createConnection({
     host: 'localhost',
     port: 3306,
@@ -14,36 +16,45 @@ const connection = mysql.createConnection({
 
 const letsGo = () => {
     inquirer.prompt([{
-        type: 'list',
-        message: 'Would you like to sell or buy an item?',
-        choices: ['Buy', 'Sell'],
-        name: 'buyOrSell',
-    }, ])
+            type: 'list',
+            message: 'Would you like to sell or buy an item?',
+            choices: ['Buy', 'Sell', 'Exit'],
+            name: 'buyOrSell',
+        }, ])
 
-    .then((data) => {
-        if (data.buyOrSell === 'Buy') {
-            weBuying()
-        } else {
-            weSelling()
-        }
-    })
-    // connection.end()
-}
+        .then((data) => {
+            if (data.buyOrSell === 'Buy') {
+                weBuying();
+            } else if (ata.buyOrSell === 'Sell'){
+                weSelling();
+            } else {
+                connection.end();
+            }
+        });
+};
 
 
 const weBuying = () => {
-    console.log('Here are our current listed itmes...\n');
     connection.query('SELECT * FROM items', (err, res) => {
         if (err) throw err;
-        console.table(res)
 
+        inquirer.prompt([
+            {
+            name: "availableItems",
+            type: 'rawlist',
+            choices() {
+                const anArrayForItems = [];
+                res.forEach(({ item_name }) => {
+                    anArrayForItems.push(item_name);
+                });
+                return anArrayForItems;
+            },
+            message: 'Which item would you like to bid on?',
+            }
+        ])
+    })
 
-        
-        inquirer.prompt([{
-            
-        }])
-        connection.end()
-    });
+        // connection.end()
 };
 
 
